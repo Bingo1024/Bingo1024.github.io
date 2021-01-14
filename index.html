@@ -162,102 +162,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-IIC总线时序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/Bingo1024.github.io/2021/01/14/IIC%E6%80%BB%E7%BA%BF%E6%97%B6%E5%BA%8F/">IIC总线时序</a>
-    </h1>
-  
-
-        
-        <a href="/Bingo1024.github.io/2021/01/14/IIC%E6%80%BB%E7%BA%BF%E6%97%B6%E5%BA%8F/" class="archive-article-date">
-  	<time datetime="2021-01-14T15:32:16.832Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="IIC总线时序"><a href="#IIC总线时序" class="headerlink" title="IIC总线时序"></a>IIC总线时序</h1><h2 id="IIC物理层"><a href="#IIC物理层" class="headerlink" title="IIC物理层"></a>IIC物理层</h2><ol>
-<li><p>IIC有两条总线，双向串行数据线（SDA），串行时钟线（SCL）。</p>
-</li>
-<li><p>每个连接到总线的设备都有一个独立的地址，主机可以利用这个地址进行不通设备之间的访问。</p>
-<h2 id="IIC协议层"><a href="#IIC协议层" class="headerlink" title="IIC协议层"></a>IIC协议层</h2></li>
-</ol>
-<h3 id="数据有效性规定"><a href="#数据有效性规定" class="headerlink" title="数据有效性规定"></a>数据有效性规定</h3><p>当SCL为高电平时数据线上数据必须保持稳定，SCL为低电平时才允许数据线上高地点平变化。<br>当SCL为高电平时数据有效<br><img src="https://gitee.com/bingo1024/picture_bed/raw/master/img/image-20200804183132835.png"></p>
-<h3 id="起始和终止信号"><a href="#起始和终止信号" class="headerlink" title="起始和终止信号"></a>起始和终止信号</h3><ul>
-<li><p>起始：S<br>当SCL为高电平时，SDA由高电平转向低电平 。</p>
-</li>
-<li><p>终止： P<br>当SCL为高电平时，SDA由低电平转向高电平。</p>
-<p><strong>起始和终止信号都是主机发送，当起始信号产生后，总线就处于占用状态，当终止信号产生后，总线就处于空闲状态</strong></p>
-<p><img src="https://gitee.com/bingo1024/picture_bed/raw/f6edfd1d158a88c446d06e58590e8faf6120f2c0/img/image-20200804183811859.png"></p>
-</li>
-</ul>
-<h3 id="应答响应"><a href="#应答响应" class="headerlink" title="应答响应"></a>应答响应</h3><p>每当发送器件传输完一个字节的数据后，后面必须紧跟一个校验位，这个校<br>验位是接收端通过控制SDA（数据线）来实现的，以提醒发送端数据我这边已经<br>接收完成，数据传送可以继续进行。这个校验位其实就是数据或地址传输过程中<br>的响应。<br>应答即接收端通知发送端数据成功接收，希望发送端继续发送数据。<br>非应答即接收端希望结束数据传输。<br>接收端将SDA拉低即为应答，拉高为非应答。</p>
-<p><img src="https://gitee.com/bingo1024/picture_bed/raw/master/img/image-20200804185019627.png"></p>
-<h3 id="总线寻址方式"><a href="#总线寻址方式" class="headerlink" title="总线寻址方式"></a>总线寻址方式</h3><p><img src="https://gitee.com/bingo1024/picture_bed/raw/master/img/image-20200804185404216.png"></p>
-<ol>
-<li>七位寻址字节（寻址字节是起始信号后第一个字节数据）<br>D1~D7组成从机的地址，D0位决定数据传输方向，D0 = 1是主机由从机读取数据，D0 = 0 则是主机向从机发送数据</li>
-<li>主机发送 寻址字节后，总线上所有从机都会与自身地址比较，若不相同则忽略后面的数据，相同则被器件判定该从机被主机寻址。</li>
-<li>从机地址中可编程部分决定了可接入总线该类器件的最大数目。如一个从机的7 位寻址位有4 位是固定位，3 位是可编程位，这时仅能寻址8 个同样的器件，即可以有8 个同样的器件接入到该I2C 总线系统中。</li>
-</ol>
-<h3 id="数据传输"><a href="#数据传输" class="headerlink" title="数据传输"></a>数据传输</h3><ol>
-<li><p>主机向从机发送数据，传输方向在整个过程中不改变</p>
-<p><img src="https://gitee.com/bingo1024/picture_bed/raw/master/img/image-20200804190639181.png"></p>
-</li>
-<li><p>从机向主机发送数据</p>
-<p><img src="https://gitee.com/bingo1024/picture_bed/raw/master/img/image-20200804190807520.png"></p>
-</li>
-<li><p>主机向从机发送数据，从机再向主机发送数据</p>
-<p><img src="https://gitee.com/bingo1024/picture_bed/raw/master/img/image-20200804190934877.png"><br><strong>需要重新起始信号和寻址，但不一定需要终止信号</strong></p>
-</li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/Bingo1024.github.io/2021/01/14/IIC%E6%80%BB%E7%BA%BF%E6%97%B6%E5%BA%8F/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -265,7 +169,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/Bingo1024.github.io/2021/01/14/hello-world/">Hello World 123</a>
+      <a class="article-title" href="/Bingo1024.github.io/2021/01/14/hello-world/">Hello World</a>
     </h1>
   
 
@@ -278,10 +182,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-        
-          <a class="article-more-a" href="/Bingo1024.github.io/2021/01/14/hello-world/#more">more >></a>
-        
+        <p><strong>祝我玩的开心</strong></p>
+
       
 
       
